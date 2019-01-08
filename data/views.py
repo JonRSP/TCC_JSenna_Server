@@ -5,6 +5,8 @@ import json
 from django.shortcuts import redirect
 from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
+from django.template import loader
+from .models import *
 
 # Create your views here.
 
@@ -24,4 +26,7 @@ def postData(request):
 		return redirect('indexData')
 
 def index(request):
-	return StreamingHttpResponse("data pagina principal")
+	template = loader.get_template('data/index.html')
+	numReadings = Reading.objects.count()
+	context = {'numReadings':numReadings}
+	return HttpResponse(template.render(context, request))
