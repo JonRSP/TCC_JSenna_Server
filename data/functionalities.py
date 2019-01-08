@@ -2,7 +2,9 @@ from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 
 def addSensor(received_data):
-	newSensor = Sensor(longitude=received_data	['longitude'],latitude=received_data['latitude'], description=received_data['description'], score=0)
+	newSensor = Sensor(score=0)
+	newSensor.save()
+	newSensor.description = "Descricao temporaria sensor "+str(newSensor.id)
 	newSensor.save()
 	for kind in received_data['sensorKind']:
 		try:

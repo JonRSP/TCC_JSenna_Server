@@ -5,10 +5,10 @@ from django.db import models
 
 # Create your models here.
 class Sensor(models.Model):
-	description = models.CharField(max_length=50)
-	longitude = models.DecimalField(max_digits=5,decimal_places=2)
-	latitude = models.DecimalField(max_digits=5,decimal_places=2)
-	score = models.DecimalField(max_digits=3,decimal_places=2)
+	description = models.CharField(max_length=50, null=True)
+	longitude = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+	latitude = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+	score = models.DecimalField(max_digits=3, decimal_places=2)
 
 	def __str__(self):
 		return self.description
