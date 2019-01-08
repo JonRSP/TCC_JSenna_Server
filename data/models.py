@@ -15,9 +15,9 @@ class Sensor(models.Model):
 
 class SensorKind(models.Model):
 	description = models.CharField(max_length=50)
-	unit = models.CharField(max_length=5)
-	minValue = models.DecimalField(max_digits=7,decimal_places=2)
-	maxValue = models.DecimalField(max_digits=7,decimal_places=2)
+	unit = models.CharField(max_length=5, null=True)
+	minValue = models.DecimalField(max_digits=7,decimal_places=2, null=True)
+	maxValue = models.DecimalField(max_digits=7,decimal_places=2, null=True)
 	sensors = models.ManyToManyField(Sensor)
 
         def __str__(self):
@@ -29,4 +29,3 @@ class Reading(models.Model):
 	sensorKind = models.ForeignKey(SensorKind, on_delete=models.CASCADE)
 	value = models.FloatField()
 	moment = models.DateTimeField(auto_now_add=True)
-

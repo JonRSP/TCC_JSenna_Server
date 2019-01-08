@@ -25,7 +25,7 @@ SECRET_KEY = '$4nopya_5=1e^guxrgue5cvg6^)32o)_u4tw8g!js1y*x&6vg1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.86.120.246']
+ALLOWED_HOSTS = ['3.86.120.246','127.0.0.1']
 
 
 # Application definition
