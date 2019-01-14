@@ -1,1 +1,14 @@
-<h1>homepage </h1>
+{% extends 'data/base.html' %}
+
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Uma Abordagem Colaborativa para a Avaliação e Classificação de Sensores em ambientes IoT</h1>
+    <p class="lead">Este servidor foi montado para a execução do projeto final do aluno Jonatas Ribeiro Senna Pires, graduando na Universidade de Brasília.</p>
+    <p class="lead">Os arquivos referentes à execução do trabalho podem ser encontrados em:</p>
+    <ul><a class="btn btn-primary btn-lg" href="https://github.com/JonRSP/TCC_JSenna" role="button">Texto e Apresentação de Slides</a>
+    <a class="btn btn-primary btn-lg" href="https://github.com/JonRSP/TCC_JSenna_Server" role="button">Código do Servidor</a>
+    <a class="btn btn-primary btn-lg" href="https://github.com/JonRSP/TCC_JSenna_Sensor" role="button">Código dos Sensores</a></ul>
+  </div>
+</div>
+{% endblock %}

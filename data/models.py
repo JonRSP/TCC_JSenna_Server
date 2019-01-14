@@ -20,8 +20,8 @@ class SensorKind(models.Model):
 	maxValue = models.DecimalField(max_digits=7,decimal_places=2, null=True)
 	sensors = models.ManyToManyField(Sensor)
 
-        def __str__(self):
-                return self.description
+    	def __str__(self):
+    		return self.description
 
 class Reading(models.Model):
 	id = models.BigAutoField(primary_key=True)
@@ -29,3 +29,6 @@ class Reading(models.Model):
 	sensorKind = models.ForeignKey(SensorKind, on_delete=models.CASCADE)
 	value = models.FloatField()
 	moment = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return str(self.sensorKind)+' no valor de '+str(self.value)+ ' em ' +str(self.moment)

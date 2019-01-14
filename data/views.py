@@ -2,10 +2,9 @@
 from __future__ import unicode_literals
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
-from django.template import loader
 from .models import *
 
 # Create your views here.
@@ -26,7 +25,14 @@ def postData(request):
 		return redirect('indexData')
 
 def index(request):
-	template = loader.get_template('data/index.html')
+	sensorInfo = Sensor.objects.all()
 	numReadings = Reading.objects.count()
-	context = {'numReadings':numReadings}
-	return HttpResponse(template.render(context, request))
+	sensorReadingInfo = []
+	lastReading=[]
+	for sensor in sensorInfo:
+		sensorReadingInfo.append(Reading.objects.filter(sensor_id__exact = sensor.id).count())
+		lastReading.append(Reading.objects.filter(sensor_id__exact=sensor.id).latest('moment'))
+	info = zip(sensorInfo, sensorReadingInfo, lastReading)
+	print(info)
+	context = {'numReadings':numReadings , 'info':info}
+	return render(request, 'data/index.html', context)

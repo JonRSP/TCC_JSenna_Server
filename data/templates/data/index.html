@@ -1,1 +1,26 @@
-<h1>  Atualmente, constam {{numReadings}} leituras de sensores</h1>
+{% extends 'data/base.html' %}
+{% block title %} Data {% endblock %}
+{% block body %}
+<center>
+<div class="alert alert-primary" role="alert">
+Atualmente, constam {{numReadings}} leituras de sensores
+</div>
+  <div class="container-fluid">
+  {% for entry in info %}
+    <div class="card w-25">
+    <div class="card-header">
+      {{entry.0}}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Total de leituras: {{entry.1}}</h5>
+      <p class="card-text">Última leitura foi de {{entry.2.sensorKind}} no valor de {{entry.2.value}}</p>
+      <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+    </div>
+    <div class="card-footer text-muted">
+      {{entry.2.moment}}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</center>
+{% endblock %}
