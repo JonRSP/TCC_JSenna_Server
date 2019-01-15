@@ -33,6 +33,8 @@ def index(request):
 		sensorReadingInfo.append(Reading.objects.filter(sensor_id__exact = sensor.id).count())
 		lastReading.append(Reading.objects.filter(sensor_id__exact=sensor.id).latest('moment'))
 	info = zip(sensorInfo, sensorReadingInfo, lastReading)
-	print(info)
-	context = {'numReadings':numReadings , 'info':info}
+	pieData =[('sensor', 'quantidade')]
+	for data in info:
+		pieData.append((data[0].description, data[1]))
+	context = {'numReadings':numReadings , 'info':info, 'pieData':pieData}
 	return render(request, 'data/index.html', context)
