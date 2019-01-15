@@ -5,16 +5,18 @@
 <div class="alert alert-primary" role="alert">
 Atualmente, constam {{numReadings}} leituras de sensores
 </div>
+</center>
 <div class="row">
 <div class="col-md">
   <div class="container-fluid">
+    <center>
   {% for entry in info %}
-    <div class="card w-50">
+    <div class="card w-70">
     <div class="card-header">
       {{entry.0}}
     </div>
     <div class="card-body">
-      <h5 class="card-title">Total de leituras: {{entry.1}}</h5>
+      <!-- <h5 class="card-title">Total de leituras: {{entry.1}}</h5> -->
       <p class="card-text">Última leitura foi de {{entry.2.sensorKind}} no valor de {{entry.2.value}}</p>
       <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
     </div>
@@ -22,12 +24,14 @@ Atualmente, constam {{numReadings}} leituras de sensores
       {{entry.2.moment}}
     </div>
   </div>
+  <br>
   {% endfor %}
+</center>
 </div>
 </div>
 
 <div class="col-sm">
-
+<center>
   <div id="piechart"></div>
   <script type="text/javascript">
    var a =[];
@@ -62,19 +66,20 @@ Atualmente, constam {{numReadings}} leituras de sensores
     var data = google.visualization.arrayToDataTable(a);
 
     // Optional; add a title and set the width and height of the chart
-    var options = {'title':'Leituras por Sensor', 'width':550, 'height':400};
+    var options = {'title':'Leituras por Sensor', 'width':700, 'height':500};
 
     // Display the chart inside the <div> element with id="piechart"
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
     chart.draw(data, options);
   }
   </script>
-</div>
-
-
-</div>
-
-
-
 </center>
+</div>
+
+
+</div>
+
+
+
+
 {% endblock %}
