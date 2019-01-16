@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
 from .models import *
+from django.db.models import Count
 
 # Create your views here.
 
@@ -38,3 +39,13 @@ def index(request):
 		pieData.append((data[0].description, data[1]))
 	context = {'numReadings':numReadings , 'info':info, 'pieData':pieData}
 	return render(request, 'data/index.html', context)
+
+def sensorDetail(request, sensor_id):
+	dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
+	countInfo = []
+	for moment in dateReadingInfo:
+		countInfo.append(Reading.objects.filter(moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
+	dateCountInfo= zip(dateReadingInfo,countInfo)
+	print(dateCountInfo)
+	context = {'id':sensor_id,'dateCountInfo':dateCountInfo}
+	return render(request, 'data/sensor.html', context)
