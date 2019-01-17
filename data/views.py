@@ -12,6 +12,11 @@ from datetime import datetime, timedelta, time
 # Create your views here.
 varAux = datetime.now()-timedelta(1)
 dateReadingInfo = 0
+sensorPK=0
+countInfo = []
+tempAverage =[]
+umidAverage =[]
+dateCountInfo = 0
 
 @csrf_exempt
 def postData(request):
@@ -46,23 +51,27 @@ def index(request):
 def sensorDetail(request, sensor_id):
 	global varAux
 	global dateReadingInfo
+	global sensorPK
+	global countInfo
+	global dateCountInfo
+	global tempAverage
+	global umidAverage
 	sensor = Sensor.objects.get(id=sensor_id)
 	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
 	if(varAux.date() != datetime.now().date()):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
 		varAux = datetime.now()
-	countInfo = []
-	for moment in dateReadingInfo:
-		countInfo.append(Reading.objects.filter(sensor_id__exact = sensor_id, moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
-	dateCountInfo= zip(dateReadingInfo,countInfo)
-	tempAverage =[]
-	for hour in range(0, 24):
-		tempAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Temperatura').aggregate(Avg('value'))['value__avg'])
-	tempAverage = zip(range(0,24), tempAverage)
-	umidAverage =[]
-	for hour in range(0, 24):
-		umidAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Umidade').aggregate(Avg('value'))['value__avg'])
-	umidAverage = zip(range(0,24), umidAverage)
+	if(sensorPK != sensor_id or not countInfo):
+		sensorPK = sensor_id
+		for moment in dateReadingInfo:
+			countInfo.append(Reading.objects.filter(sensor_id__exact = sensor_id, moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
+		dateCountInfo= zip(dateReadingInfo,countInfo)
+		for hour in range(0, 24):
+			tempAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Temperatura').aggregate(Avg('value'))['value__avg'])
+		tempAverage = zip(range(0,24), tempAverage)
+		for hour in range(0, 24):
+			umidAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Umidade').aggregate(Avg('value'))['value__avg'])
+		umidAverage = zip(range(0,24), umidAverage)
 	context = {'id':sensor_id,'dateCountInfo':dateCountInfo, 'tempAverage':tempAverage, 'umidAverage':umidAverage, 'lastTempReading':lastTempReading, 'lastUmidReading':lastUmidReading, 'sensor':sensor}
 	return render(request, 'data/sensor.html', context)
