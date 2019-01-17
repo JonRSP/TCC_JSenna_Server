@@ -18,10 +18,10 @@ regsPerDay.push(b);
 <script type="text/javascript">
 try
 {
-  var b = ['{{data.0|safe}}', {{data.1|safe}}];
+  var b = ['{{data.0|safe}}'.concat(':00'), {{data.1|safe}}];
 }catch(err)
 {
-  var b = ['{{data.0|safe}}', null];
+  var b = ['{{data.0|safe}}'.concat(':00'), null];
 }
 averageUmid.push(b);
 </script>
@@ -31,10 +31,10 @@ averageUmid.push(b);
 <script type="text/javascript">
 try
 {
-  var b = ['{{data.0|safe}}', {{data.1|safe}}];
+  var b = ['{{data.0|safe}}'.concat(':00'), {{data.1|safe}}];
 }catch(err)
 {
-  var b = ['{{data.0|safe}}', null];
+  var b = ['{{data.0|safe}}'.concat(':00'), null];
 }
 averageTemp.push(b);
 </script>
@@ -81,7 +81,6 @@ averageTemp.push(b);
 
        var options = {
          title: "Registros por Dia",
-         height: 350,
        };
 
        chart.draw(dataTable, options);
@@ -89,9 +88,14 @@ averageTemp.push(b);
        chart2.draw(avgTempData,options2);
    }
     </script>
-    <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
-    <div id="umid_chart" style="width: 1000px; height: 350px;"></div>
-    <div id="temp_chart" style="width: 1000px; height: 350px;"></div>
+    <br>
+    <br>
+    <br>
+    <center>
+    <div id="calendar_basic" style="width: 1500px; height: 175px;"></div>
+  </center>
+    <div id="umid_chart" style="width: 1500px; height: 350px;"></div>
+    <div id="temp_chart" style="width: 1500px; height: 350px;"></div>
 
 
 
