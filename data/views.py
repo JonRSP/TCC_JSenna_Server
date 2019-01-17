@@ -55,7 +55,6 @@ def sensorDetail(request, sensor_id):
 	countInfo = []
 	for moment in dateReadingInfo:
 		countInfo.append(Reading.objects.filter(sensor_id__exact = sensor_id, moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
-		varAux = datetime.now()
 	dateCountInfo= zip(dateReadingInfo,countInfo)
 	tempAverage =[]
 	for hour in range(0, 24):
