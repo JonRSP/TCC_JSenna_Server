@@ -3,26 +3,81 @@
 {% block body %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-var a = [];
+var regsPerDay = [];
+var averageUmid=[];
+var averageTemp=[];
 </script>
 {% for data in dateCountInfo %}
 <script type="text/javascript">
 var b = [new Date({{data.0.year|safe}}, {{data.0.month|safe}}-1, {{data.0.day|safe}}), {{data.1|safe}}];
-a.push(b);
+regsPerDay.push(b);
+</script>
+{% endfor %}
+
+{% for data in umidAverage %}
+<script type="text/javascript">
+try
+{
+  var b = ['{{data.0|safe}}', {{data.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.0|safe}}', null];
+}
+averageUmid.push(b);
+</script>
+{% endfor %}
+
+{% for data in tempAverage %}
+<script type="text/javascript">
+try
+{
+  var b = ['{{data.0|safe}}', {{data.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.0|safe}}', null];
+}
+averageTemp.push(b);
 </script>
 {% endfor %}
 
     <script type="text/javascript">
-      google.charts.load("current", {packages:["calendar"]});
+      google.charts.load("current", {packages:["calendar",'corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
    function drawChart() {
        var dataTable = new google.visualization.DataTable();
        dataTable.addColumn({ type: 'date', id: 'Date' });
        dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-       dataTable.addRows(a);
+       dataTable.addRows(regsPerDay);
+
+
+       var avgUmidData = new google.visualization.DataTable();
+       avgUmidData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
+       avgUmidData.addColumn({type:'number', id:'valor', label:'Umidade %'});
+       avgUmidData.addRows(averageUmid);
+
+        var options1 = {
+          title: 'Umidade Média',
+          curveType: 'function',
+          legend: { position: 'right' }
+        };
+
+
+               var avgTempData = new google.visualization.DataTable();
+               avgTempData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
+               avgTempData.addColumn({type:'number', id:'valor', label:'Temperaura °C'});
+               avgTempData.addRows(averageTemp);
+
+                var options2 = {
+                  title: 'Temperaura Média',
+                  curveType: 'function',
+                  legend: { position: 'right' }
+                };
 
        var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+        var chart1 = new google.visualization.LineChart(document.getElementById('umid_chart'));
+        var chart2 = new google.visualization.LineChart(document.getElementById('temp_chart'));
 
        var options = {
          title: "Registros por Dia",
@@ -30,9 +85,13 @@ a.push(b);
        };
 
        chart.draw(dataTable, options);
+       chart1.draw(avgUmidData,options1);
+       chart2.draw(avgTempData,options2);
    }
     </script>
     <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+    <div id="umid_chart" style="width: 1000px; height: 350px;"></div>
+    <div id="temp_chart" style="width: 1000px; height: 350px;"></div>
 
 
 

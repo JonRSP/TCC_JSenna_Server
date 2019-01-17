@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
 from .models import *
-from django.db.models import Count
+from django.db.models import Avg
 
 # Create your views here.
 
@@ -46,6 +46,13 @@ def sensorDetail(request, sensor_id):
 	for moment in dateReadingInfo:
 		countInfo.append(Reading.objects.filter(sensor_id__exact = sensor_id, moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
 	dateCountInfo= zip(dateReadingInfo,countInfo)
-	print(dateCountInfo)
-	context = {'id':sensor_id,'dateCountInfo':dateCountInfo}
+	tempAverage =[]
+	for hour in range(0, 24):
+		tempAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Temperatura').aggregate(Avg('value'))['value__avg'])
+	tempAverage = zip(range(0,24), tempAverage)
+	umidAverage =[]
+	for hour in range(0, 24):
+		umidAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Umidade').aggregate(Avg('value'))['value__avg'])
+	umidAverage = zip(range(0,24), umidAverage)
+	context = {'id':sensor_id,'dateCountInfo':dateCountInfo, 'tempAverage':tempAverage, 'umidAverage':umidAverage}
 	return render(request, 'data/sensor.html', context)
