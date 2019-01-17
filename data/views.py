@@ -62,7 +62,8 @@ def sensorDetail(request, sensor_id):
 	if(varAux.date() != datetime.now().date()):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
 		varAux = datetime.now()
-	if(sensorPK != sensor_id or not countInfo):
+	if(sensorPK != sensor_id or not countInfo or varAux.hour != datetime.now().hour):
+		varAux = datetime.now()
 		sensorPK = sensor_id
 		for moment in dateReadingInfo:
 			countInfo.append(Reading.objects.filter(sensor_id__exact = sensor_id, moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
