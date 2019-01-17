@@ -13,7 +13,7 @@ from .functionalities import generateData
 # Create your views here.
 varAux = datetime.now()-timedelta(1)
 dateReadingInfo=0
-dados={}
+dados = {}
 
 
 @csrf_exempt
@@ -53,9 +53,9 @@ def sensorDetail(request, sensor_id):
 	sensor = Sensor.objects.get(id=sensor_id)
 	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
-	if(varAux.date() != datetime.now().date() or not dados):
+	if((varAux.date() != datetime.now().date() or not dados) or str(sensor_id) not in dados):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
 		varAux = datetime.now()
-		dados = generateData(dateReadingInfo)
+		dados.update({str(sensor_id):generateData(dateReadingInfo, sensor_id)})
 	context = {'id':sensor_id,'dateCountInfo':dados[str(sensor_id)][1], 'tempAverage':dados[str(sensor_id)][2], 'umidAverage':dados[str(sensor_id)][3], 'lastTempReading':lastTempReading, 'lastUmidReading':lastUmidReading, 'sensor':sensor}
 	return render(request, 'data/sensor.html', context)
