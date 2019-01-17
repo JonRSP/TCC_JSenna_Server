@@ -55,7 +55,10 @@ def sensorDetail(request, sensor_id):
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
 	if((varAux.date() != datetime.now().date() or not dados) or str(sensor_id) not in dados):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
+		if (varAux.date() != datetime.now().date() and str(sensor_id) in dados):
+			dados[str(sensor_id)]=generateData(dateReadingInfo, sensor_id)
+		else:
+			dados.update({str(sensor_id):generateData(dateReadingInfo, sensor_id)})
 		varAux = datetime.now()
-		dados.update({str(sensor_id):generateData(dateReadingInfo, sensor_id)})
 	context = {'id':sensor_id,'dateCountInfo':dados[str(sensor_id)][1], 'tempAverage':dados[str(sensor_id)][2], 'umidAverage':dados[str(sensor_id)][3], 'lastTempReading':lastTempReading, 'lastUmidReading':lastUmidReading, 'sensor':sensor}
 	return render(request, 'data/sensor.html', context)
