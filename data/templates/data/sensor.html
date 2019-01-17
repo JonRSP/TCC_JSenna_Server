@@ -81,6 +81,7 @@ averageTemp.push(b);
 
        var options = {
          title: "Registros por Dia",
+         width:550
        };
 
        chart.draw(dataTable, options);
@@ -91,11 +92,69 @@ averageTemp.push(b);
     <br>
     <br>
     <br>
-    <center>
-    <div id="calendar_basic" style="width: 1500px; height: 175px;"></div>
-  </center>
+    <div class="row">
+      <div class="col-md">
+        <div id="calendar_basic" style="width: 550px; height: 175px;"></div>
+      </div>
+      <div class="col-md">
+          <div class="card w-50">
+          <!-- <div class="card-header">
+            {{sensor.description}}
+          </div> -->
+          <div class="card-body">
+              <center>
+                <div class="col-md">
+                  <div class="card">
+                    <div class="card-header">
+                          Score
+                    </div>
+                    <div class="card-body">
+                      {{sensor.score}}
+                    </div>
+                  </div>
+                </div>
+              </center>
+<br>
+            <div class="row">
+              <div class="col-md">
+                <div class="card">
+                  <div class="card-header">
+                    Temperatura
+                  </div>
+                  <div class="card-body">
+                    <center>
+                      {{lastTempReading.value}} °C
+                    </center>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="card">
+                  <div class="card-header">
+                    Umidade
+                  </div>
+                  <div class="card-body">
+                    <center>
+                    {{lastUmidReading.value}} %
+                    </center>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <p class="card-text">Última leitura foi de teste no valor de teste</p> -->
+            <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
     <div id="umid_chart" style="width: 1500px; height: 350px;"></div>
+  </div>
+    <div class="row">
     <div id="temp_chart" style="width: 1500px; height: 350px;"></div>
+    </div>
 
 
 

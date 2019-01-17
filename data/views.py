@@ -41,6 +41,9 @@ def index(request):
 	return render(request, 'data/index.html', context)
 
 def sensorDetail(request, sensor_id):
+	sensor = Sensor.objects.get(id=sensor_id)
+	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
+	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
 	dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
 	countInfo = []
 	for moment in dateReadingInfo:
@@ -54,5 +57,5 @@ def sensorDetail(request, sensor_id):
 	for hour in range(0, 24):
 		umidAverage.append(Reading.objects.filter(sensor_id__exact=sensor_id,moment__hour=hour, sensorKind__description__iexact='Umidade').aggregate(Avg('value'))['value__avg'])
 	umidAverage = zip(range(0,24), umidAverage)
-	context = {'id':sensor_id,'dateCountInfo':dateCountInfo, 'tempAverage':tempAverage, 'umidAverage':umidAverage}
+	context = {'id':sensor_id,'dateCountInfo':dateCountInfo, 'tempAverage':tempAverage, 'umidAverage':umidAverage, 'lastTempReading':lastTempReading, 'lastUmidReading':lastUmidReading, 'sensor':sensor}
 	return render(request, 'data/sensor.html', context)
