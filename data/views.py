@@ -7,8 +7,11 @@ from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
 from .models import *
 from django.db.models import Avg
+from datetime import datetime, timedelta, time
 
 # Create your views here.
+varAux = datetime.now()-timedelta(1)
+dateReadingInfo = 0
 
 @csrf_exempt
 def postData(request):
@@ -41,13 +44,18 @@ def index(request):
 	return render(request, 'data/index.html', context)
 
 def sensorDetail(request, sensor_id):
+	global varAux
+	global dateReadingInfo
 	sensor = Sensor.objects.get(id=sensor_id)
 	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
-	dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
+	if(varAux.date() != datetime.now().date()):
+		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
+		varAux = datetime.now()
 	countInfo = []
 	for moment in dateReadingInfo:
 		countInfo.append(Reading.objects.filter(sensor_id__exact = sensor_id, moment__year=moment.year, moment__month=moment.month,moment__day=moment.day).count())
+		varAux = datetime.now()
 	dateCountInfo= zip(dateReadingInfo,countInfo)
 	tempAverage =[]
 	for hour in range(0, 24):
