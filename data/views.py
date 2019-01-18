@@ -7,13 +7,15 @@ from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
 from .models import *
 
-from datetime import datetime, timedelta, time
-from .functionalities import generateData
+from datetime import datetime
+from .functionalities import generateAvgData, generateLastData
 
 # Create your views here.
 varAux = datetime.now()-timedelta(1)
+varAux2 = datetime.now()-timedelta(hours=1)
 dateReadingInfo=0
-dados = {}
+dadosAvg = {}
+dadosLast = {}
 
 
 @csrf_exempt
@@ -43,22 +45,43 @@ def index(request):
 	pieData =[('sensor', 'quantidade')]
 	for data in info:
 		pieData.append((data[0].description, data[1]))
-	context = {'numReadings':numReadings , 'info':info, 'pieData':pieData}
+	context = {
+	 'numReadings':numReadings,
+	 'info':info,
+	 'pieData':pieData
+	 }
 	return render(request, 'data/index.html', context)
 
 def sensorDetail(request, sensor_id):
 	global varAux
+	global varAux2
 	global dateReadingInfo
-	global dados
+	global dadosAvg
+	global dadosLast
 	sensor = Sensor.objects.get(id=sensor_id)
 	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
-	if((varAux.date() != datetime.now().date() or not dados) or str(sensor_id) not in dados):
-		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
-		if (varAux.date() != datetime.now().date() and str(sensor_id) in dados):
-			dados[str(sensor_id)]=generateData(dateReadingInfo, sensor_id)
+	if(varAux2.hour != datetime.now().hour or not dadosLast or str(sensor_id) not in dadosLast):
+		if(varAux2.hour != datetime.now().hour and str(sensor_id) in dadosLast):
+			dadosLast[str(sensor_id)] = generateLastData(sensor_id)
 		else:
-			dados.update({str(sensor_id):generateData(dateReadingInfo, sensor_id)})
+			dadosLast.update({str(sensor_id):generateLastData(sensor_id)})
+	if((varAux.date() != datetime.now().date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
+		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
+		if (varAux.date() != datetime.now().date() and str(sensor_id) in dadosAvg):
+			dadosAvg[str(sensor_id)]=generateAvgData(dateReadingInfo, sensor_id)
+		else:
+			dadosAvg.update({str(sensor_id):generateAvgData(dateReadingInfo, sensor_id)})
 		varAux = datetime.now()
-	context = {'id':sensor_id,'dateCountInfo':dados[str(sensor_id)][1], 'tempAverage':dados[str(sensor_id)][2], 'umidAverage':dados[str(sensor_id)][3], 'lastTempReading':lastTempReading, 'lastUmidReading':lastUmidReading, 'sensor':sensor}
+	context = {
+	 'id':sensor_id,
+	 'dateCountInfo':dadosAvg[str(sensor_id)][1],
+	 'tempAverage':dadosAvg[str(sensor_id)][2],
+	 'umidAverage':dadosAvg[str(sensor_id)][3],
+	 'lastTempReading':lastTempReading,
+	 'lastUmidReading':lastUmidReading,
+	 'sensor':sensor,
+	 'lastTempAvg':dadosLast[str(sensor_id)][1],
+	 'lastUmidAvg':dadosLast[str(sensor_id)][2]
+	 }
 	return render(request, 'data/sensor.html', context)
