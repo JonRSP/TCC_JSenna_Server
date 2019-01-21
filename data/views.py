@@ -8,7 +8,7 @@ from .functionalities import *
 from .models import *
 
 from datetime import datetime
-from .functionalities import generateAvgData, generateLastData
+from .functionalities import generateAvgData, generateLastData, calculateScore
 
 # Create your views here.
 varAux = datetime.now()-timedelta(1)
@@ -73,17 +73,13 @@ def sensorDetail(request, sensor_id):
 		else:
 			dadosAvg.update({str(sensor_id):generateAvgData(dateReadingInfo, sensor_id)})
 		varAux = datetime.now()
-	teste = zip(dadosAvg[str(sensor_id)][2], dadosAvg[str(sensor_id)][3],dadosLast[str(sensor_id)][1],dadosLast[str(sensor_id)][2])
+	dadosGraficos = zip(dadosAvg[str(sensor_id)][2], dadosAvg[str(sensor_id)][3],dadosLast[str(sensor_id)][1],dadosLast[str(sensor_id)][2])
 	context = {
 	 'id':sensor_id,
 	 'dateCountInfo':dadosAvg[str(sensor_id)][1],
-	 'tempAverage':dadosAvg[str(sensor_id)][2],
-	 'umidAverage':dadosAvg[str(sensor_id)][3],
 	 'lastTempReading':lastTempReading,
 	 'lastUmidReading':lastUmidReading,
 	 'sensor':sensor,
-	 'lastTempAvg':dadosLast[str(sensor_id)][1],
-	 'lastUmidAvg':dadosLast[str(sensor_id)][2],
-	 'teste': teste
+	 'dadosGraficos': dadosGraficos
 	 }
 	return render(request, 'data/sensor.html', context)
