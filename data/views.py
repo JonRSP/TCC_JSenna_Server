@@ -73,6 +73,7 @@ def sensorDetail(request, sensor_id):
 		else:
 			dadosAvg.update({str(sensor_id):generateAvgData(dateReadingInfo, sensor_id)})
 		varAux = datetime.now()
+	teste = zip(dadosAvg[str(sensor_id)][2], dadosAvg[str(sensor_id)][3],dadosLast[str(sensor_id)][1],dadosLast[str(sensor_id)][2])
 	context = {
 	 'id':sensor_id,
 	 'dateCountInfo':dadosAvg[str(sensor_id)][1],
@@ -82,6 +83,7 @@ def sensorDetail(request, sensor_id):
 	 'lastUmidReading':lastUmidReading,
 	 'sensor':sensor,
 	 'lastTempAvg':dadosLast[str(sensor_id)][1],
-	 'lastUmidAvg':dadosLast[str(sensor_id)][2]
+	 'lastUmidAvg':dadosLast[str(sensor_id)][2],
+	 'teste': teste
 	 }
 	return render(request, 'data/sensor.html', context)

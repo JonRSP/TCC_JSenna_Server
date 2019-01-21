@@ -8,6 +8,7 @@ var averageUmid=[];
 var averageTemp=[];
 var lastAvgUmid=[];
 var lastAvgTemp=[];
+var datatest
 </script>
 {% for data in dateCountInfo %}
 <script type="text/javascript">
@@ -16,7 +17,49 @@ var lastAvgTemp=[];
 </script>
 {% endfor %}
 
-{% for data in lastUmidAvg %}
+{% for data in teste %}
+<script type="text/javascript">
+
+try
+{
+  var b = ['{{data.3.0|safe}}'.concat(':00'), {{data.3.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.3.0|safe}}'.concat(':00'), null];
+}
+lastAvgUmid.push(b);
+
+try
+{
+  var b = ['{{data.2.0|safe}}'.concat(':00'), {{data.2.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.2.0|safe}}'.concat(':00'), null];
+}
+lastAvgTemp.push(b);
+
+try
+{
+  var b = ['{{data.1.0|safe}}'.concat(':00'), {{data.1.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.1.0|safe}}'.concat(':00'), null];
+}
+averageUmid.push(b);
+
+try
+{
+  var b = ['{{data.0.0|safe}}'.concat(':00'), {{data.0.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.0.0|safe}}'.concat(':00'), null];
+}
+averageTemp.push(b);
+</script>
+{% endfor %}
+
+
+<!-- {% for data in lastUmidAvg %}
 <script type="text/javascript">
   try
   {
@@ -66,7 +109,7 @@ var lastAvgTemp=[];
   }
 averageTemp.push(b);
 </script>
-{% endfor %}
+{% endfor %} -->
 
     <script type="text/javascript">
       google.charts.load("current", {packages:["calendar",'corechart']});
