@@ -24,12 +24,12 @@ def addSensor(received_data):
 def addReading(received_data, sensorID):
 	number = 720
 	sensorObj = Sensor.objects.get(id=sensorID)
-	if(not str(sensorID) in count):
-		count.update({str(sensorID):0})
-	count[str(sensorID)] =  (count[str(sensorID)]+1)%number
-	if( count[str(sensorID)] == 0):
-		threadScore = threading.Thread(target=calculateScore,args=(sensorID,number))
-		threadScore.start()
+	# if(not str(sensorID) in count):
+	# 	count.update({str(sensorID):0})
+	# count[str(sensorID)] =  (count[str(sensorID)]+1)%number
+	# if( count[str(sensorID)] == 0):
+	# 	threadScore = threading.Thread(target=calculateScore,args=(sensorID,number))
+	# 	threadScore.start()
 	for kind, reading in zip(received_data['sensorKind'], received_data['value']):
 		kindObj = SensorKind.objects.get(description=kind)
 		newReading = Reading(sensor=sensorObj, sensorKind=kindObj, value=reading)
