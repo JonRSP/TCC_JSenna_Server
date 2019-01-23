@@ -10,14 +10,33 @@ var lastAvgUmid=[];
 var lastAvgTemp=[];
 var datatest
 </script>
-
-<!-- <script type="text/javascript">
-   var b = [new Date({{data.0.year|safe}}, {{data.0.month|safe}}-1, {{data.0.day|safe}}), {{data.1|safe}}];
-  regsPerDay.push(b);
-</script> -->
-
-{% for data in dadosGraficos %}
+{% for data in dateCountInfo %}
 <script type="text/javascript">
+  var b = [new Date({{data.0.year|safe}}, {{data.0.month|safe}}-1, {{data.0.day|safe}}), {{data.1|safe}}];
+  regsPerDay.push(b);
+</script>
+{% endfor %}
+
+{% for data in teste %}
+<script type="text/javascript">
+
+try
+{
+  var b = ['{{data.3.0|safe}}'.concat(':00'), {{data.3.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.3.0|safe}}'.concat(':00'), null];
+}
+lastAvgUmid.push(b);
+
+try
+{
+  var b = ['{{data.2.0|safe}}'.concat(':00'), {{data.2.1|safe}}];
+}catch(err)
+{
+  var b = ['{{data.2.0|safe}}'.concat(':00'), null];
+}
+lastAvgTemp.push(b);
 
 try
 {
@@ -26,7 +45,7 @@ try
 {
   var b = ['{{data.1.0|safe}}'.concat(':00'), null];
 }
-lastAvgUmid.push(b);
+averageUmid.push(b);
 
 try
 {
@@ -35,25 +54,7 @@ try
 {
   var b = ['{{data.0.0|safe}}'.concat(':00'), null];
 }
-lastAvgTemp.push(b);
-//
-// try
-// {
-//   var b = ['{{data.1.0|safe}}'.concat(':00'), {{data.1.1|safe}}];
-// }catch(err)
-// {
-//   var b = ['{{data.1.0|safe}}'.concat(':00'), null];
-// }
-// averageUmid.push(b);
-//
-// try
-// {
-//   var b = ['{{data.0.0|safe}}'.concat(':00'), {{data.0.1|safe}}];
-// }catch(err)
-// {
-//   var b = ['{{data.0.0|safe}}'.concat(':00'), null];
-// }
-// averageTemp.push(b);
+averageTemp.push(b);
 </script>
 {% endfor %}
 
@@ -116,39 +117,39 @@ averageTemp.push(b);
 
    function drawChart() {
        // calendario
-       // var dataTable = new google.visualization.DataTable();
-       // dataTable.addColumn({ type: 'date', id: 'Date' });
-       // dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-       // dataTable.addRows(regsPerDay);
-       //
-       // var calendarOptions = {
-       //   title: "Registros por Dia",
-       //   width:550
-       // };
+       var dataTable = new google.visualization.DataTable();
+       dataTable.addColumn({ type: 'date', id: 'Date' });
+       dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+       dataTable.addRows(regsPerDay);
+
+       var calendarOptions = {
+         title: "Registros por Dia",
+         width:550
+       };
 
        // umidade média
-       // var avgUmidData = new google.visualization.DataTable();
-       // avgUmidData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
-       // avgUmidData.addColumn({type:'number', id:'valor', label:'Umidade %'});
-       // avgUmidData.addRows(averageUmid);
-       //
-       //  var umidAvgOptions = {
-       //    title: 'Umidade Média',
-       //    curveType: 'function',
-       //    legend: { position: 'right' }
-       //  };
-       //
-       //  // temperatura média
-       // var avgTempData = new google.visualization.DataTable();
-       // avgTempData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
-       // avgTempData.addColumn({type:'number', id:'valor', label:'Temperaura °C'});
-       // avgTempData.addRows(averageTemp);
-       //
-       // var tempAvgOptions = {
-       //   title: 'Temperaura Média',
-       //   curveType: 'function',
-       //   legend: { position: 'right' }
-       //  };
+       var avgUmidData = new google.visualization.DataTable();
+       avgUmidData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
+       avgUmidData.addColumn({type:'number', id:'valor', label:'Umidade %'});
+       avgUmidData.addRows(averageUmid);
+
+        var umidAvgOptions = {
+          title: 'Umidade Média',
+          curveType: 'function',
+          legend: { position: 'right' }
+        };
+
+        // temperatura média
+       var avgTempData = new google.visualization.DataTable();
+       avgTempData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
+       avgTempData.addColumn({type:'number', id:'valor', label:'Temperaura °C'});
+       avgTempData.addRows(averageTemp);
+
+       var tempAvgOptions = {
+         title: 'Temperaura Média',
+         curveType: 'function',
+         legend: { position: 'right' }
+        };
 
         // umidade média ultimas 24h
 
@@ -174,16 +175,16 @@ averageTemp.push(b);
          };
 
         // criação dos objetos de caledário
-        // var calendarChart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
-        // var umidAvgChart = new google.visualization.LineChart(document.getElementById('umid_chart'));
-        // var tempAvgChart = new google.visualization.LineChart(document.getElementById('temp_chart'));
+        var calendarChart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+        var umidAvgChart = new google.visualization.LineChart(document.getElementById('umid_chart'));
+        var tempAvgChart = new google.visualization.LineChart(document.getElementById('temp_chart'));
         var lastTempAvgChart = new google.visualization.LineChart(document.getElementById('last_temp_chart'));
         var lastUmidAvgChart = new google.visualization.LineChart(document.getElementById('last_umid_chart'));
 
         // desenhar calendarios
-      // calendarChart.draw(dataTable, calendarOptions);
-       // umidAvgChart.draw(avgUmidData,umidAvgOptions);
-       // tempAvgChart.draw(avgTempData,tempAvgOptions);
+       calendarChart.draw(dataTable, calendarOptions);
+       umidAvgChart.draw(avgUmidData,umidAvgOptions);
+       tempAvgChart.draw(avgTempData,tempAvgOptions);
        lastUmidAvgChart.draw(lastAvgUmidData,lastUmidAvgOptions);
        lastTempAvgChart.draw(lastAvgTempData,lastTempAvgOptions);
    }
@@ -191,13 +192,12 @@ averageTemp.push(b);
     <br>
     <br>
     <br>
-
-
-      <!-- <div class="col-md">
+    <div class="row">
+      <div class="col-md">
         <div id="calendar_basic" style="width: 550px; height: 175px;"></div>
-      </div> -->
+      </div>
 
-<center>
+      <div class="col-sm-5 ">
           <div class="card w-50">
           <!-- <div class="card-header">
             {{sensor.description}}
@@ -246,21 +246,21 @@ averageTemp.push(b);
           </div>
 
         </div>
+      </div>
 
-</center>
-
+    </div>
     <div class="row">
     <div id="last_umid_chart" style="width: 1600px; height: 350px;"></div>
   </div>
    <div class="row">
     <div id="last_temp_chart" style="width: 1600px; height: 350px;"></div>
     </div>
-    <!-- <div class="row">
+    <div class="row">
     <div id="umid_chart" style="width: 1600px; height: 350px;"></div>
   </div>
     <div class="row">
     <div id="temp_chart" style="width: 1600px; height: 350px;"></div>
-    </div> -->
+    </div>
 
 
 
