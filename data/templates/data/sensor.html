@@ -22,19 +22,19 @@ var datatest
 
 try
 {
-  var b = ['{{data.3.0|safe}}'.concat(':00'), {{data.3.1|safe}}];
+  var b = ['{{data.1.0|safe}}'.concat(':00'), {{data.1.1|safe}}];
 }catch(err)
 {
-  var b = ['{{data.3.0|safe}}'.concat(':00'), null];
+  var b = ['{{data.1.0|safe}}'.concat(':00'), null];
 }
 lastAvgUmid.push(b);
 
 try
 {
-  var b = ['{{data.2.0|safe}}'.concat(':00'), {{data.2.1|safe}}];
+  var b = ['{{data.0.0|safe}}'.concat(':00'), {{data.0.1|safe}}];
 }catch(err)
 {
-  var b = ['{{data.2.0|safe}}'.concat(':00'), null];
+  var b = ['{{data.0.0|safe}}'.concat(':00'), null];
 }
 lastAvgTemp.push(b);
 //
