@@ -22,7 +22,7 @@ def addSensor(received_data):
 	return newSensor.id
 
 def addReading(received_data, sensorID):
-	number = 10
+	number = 720
 	sensorObj = Sensor.objects.get(id=sensorID)
 	if(not str(sensorID) in count):
 		count.update({str(sensorID):0})

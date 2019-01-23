@@ -58,22 +58,23 @@ def sensorDetail(request, sensor_id):
 	global dateReadingInfo
 	global dadosAvg
 	global dadosLast
+	now = datetime.now()
 	sensor = Sensor.objects.get(id=sensor_id)
 	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
-	if(varAux2.hour != datetime.now().hour or not dadosLast or str(sensor_id) not in dadosLast):
-		if(varAux2.hour != datetime.now().hour and str(sensor_id) in dadosLast):
+	if(varAux2.hour != now.hour or not dadosLast or str(sensor_id) not in dadosLast):
+		if(varAux2.hour != now.hour and str(sensor_id) in dadosLast):
 			dadosLast[str(sensor_id)] = generateLastData(sensor_id)
 		else:
 			dadosLast.update({str(sensor_id):generateLastData(sensor_id)})
-		varAux2 = datetime.now()
-	if((varAux.date() != datetime.now().date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
+		varAux2 = now
+	if((varAux.date() != now.date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
-		if (varAux.date() != datetime.now().date() and str(sensor_id) in dadosAvg):
+		if (varAux.date() != now.date() and str(sensor_id) in dadosAvg):
 			dadosAvg[str(sensor_id)]=generateAvgData(dateReadingInfo, sensor_id)
 		else:
 			dadosAvg.update({str(sensor_id):generateAvgData(dateReadingInfo, sensor_id)})
-		varAux = datetime.now()
+		varAux = now
 	dadosGraficos = zip(dadosAvg[str(sensor_id)][2], dadosAvg[str(sensor_id)][3],dadosLast[str(sensor_id)][1],dadosLast[str(sensor_id)][2])
 	context = {
 	 'id':sensor_id,
