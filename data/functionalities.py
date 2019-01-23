@@ -22,14 +22,14 @@ def addSensor(received_data):
 	return newSensor.id
 
 def addReading(received_data, sensorID):
-	number = 720
+	number = 25
 	sensorObj = Sensor.objects.get(id=sensorID)
-	# if(not str(sensorID) in count):
-	# 	count.update({str(sensorID):0})
-	# count[str(sensorID)] =  (count[str(sensorID)]+1)%number
-	# if( count[str(sensorID)] == 0):
-	# 	threadScore = threading.Thread(target=calculateScore,args=(sensorID,number))
-	# 	threadScore.start()
+	if(not str(sensorID) in count):
+		count.update({str(sensorID):0})
+	count[str(sensorID)] =  (count[str(sensorID)]+1)%number
+	if( count[str(sensorID)] == 0):
+		threadScore = threading.Thread(target=calculateScore,args=(sensorID,number))
+		threadScore.start()
 	for kind, reading in zip(received_data['sensorKind'], received_data['value']):
 		kindObj = SensorKind.objects.get(description=kind)
 		newReading = Reading(sensor=sensorObj, sensorKind=kindObj, value=reading)
@@ -69,7 +69,7 @@ def calculateScore(id, number):
 	lastAvgUmid = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Umidade').order_by('-id')[:number].aggregate(Avg('value'))['value__avg']
 	timeAvgUmid = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Umidade',moment__gte=(now-delta), moment__time__gte=(now-delta).time(),moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
 	lastAvgTemp = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Temperatura').order_by('-id')[:number].aggregate(Avg('value'))['value__avg']
-	timeAvgTemp = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Temperatura', moment__time__gte=(now-delta).time(),moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
+	timeAvgTemp = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Temperatura',moment__gte=(now-delta) , moment__time__gte=(now-delta).time(),moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
 	scoreUmid = (1/(abs((lastAvgUmid/timeAvgUmid)-1)+1))*5
 	scoreTemp = (1/(abs((lastAvgTemp/timeAvgTemp)-1)+1))*5
 	score = 2/((1/scoreUmid)+(1/scoreTemp))

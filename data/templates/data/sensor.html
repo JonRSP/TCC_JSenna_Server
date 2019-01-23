@@ -10,12 +10,11 @@ var lastAvgUmid=[];
 var lastAvgTemp=[];
 var datatest
 </script>
-{% for data in dateCountInfo %}
-<script type="text/javascript">
-  var b = [new Date({{data.0.year|safe}}, {{data.0.month|safe}}-1, {{data.0.day|safe}}), {{data.1|safe}}];
+
+<!-- <script type="text/javascript">
+   var b = [new Date({{data.0.year|safe}}, {{data.0.month|safe}}-1, {{data.0.day|safe}}), {{data.1|safe}}];
   regsPerDay.push(b);
-</script>
-{% endfor %}
+</script> -->
 
 {% for data in dadosGraficos %}
 <script type="text/javascript">
@@ -117,15 +116,15 @@ averageTemp.push(b);
 
    function drawChart() {
        // calendario
-       var dataTable = new google.visualization.DataTable();
-       dataTable.addColumn({ type: 'date', id: 'Date' });
-       dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-       dataTable.addRows(regsPerDay);
-
-       var calendarOptions = {
-         title: "Registros por Dia",
-         width:550
-       };
+       // var dataTable = new google.visualization.DataTable();
+       // dataTable.addColumn({ type: 'date', id: 'Date' });
+       // dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+       // dataTable.addRows(regsPerDay);
+       //
+       // var calendarOptions = {
+       //   title: "Registros por Dia",
+       //   width:550
+       // };
 
        // umidade média
        // var avgUmidData = new google.visualization.DataTable();
@@ -175,14 +174,14 @@ averageTemp.push(b);
          };
 
         // criação dos objetos de caledário
-        var calendarChart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+        // var calendarChart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
         // var umidAvgChart = new google.visualization.LineChart(document.getElementById('umid_chart'));
         // var tempAvgChart = new google.visualization.LineChart(document.getElementById('temp_chart'));
         var lastTempAvgChart = new google.visualization.LineChart(document.getElementById('last_temp_chart'));
         var lastUmidAvgChart = new google.visualization.LineChart(document.getElementById('last_umid_chart'));
 
         // desenhar calendarios
-       calendarChart.draw(dataTable, calendarOptions);
+      // calendarChart.draw(dataTable, calendarOptions);
        // umidAvgChart.draw(avgUmidData,umidAvgOptions);
        // tempAvgChart.draw(avgTempData,tempAvgOptions);
        lastUmidAvgChart.draw(lastAvgUmidData,lastUmidAvgOptions);
@@ -192,12 +191,13 @@ averageTemp.push(b);
     <br>
     <br>
     <br>
-    <div class="row">
-      <div class="col-md">
-        <div id="calendar_basic" style="width: 550px; height: 175px;"></div>
-      </div>
 
-      <div class="col-sm-5 ">
+
+      <!-- <div class="col-md">
+        <div id="calendar_basic" style="width: 550px; height: 175px;"></div>
+      </div> -->
+
+<center>
           <div class="card w-50">
           <!-- <div class="card-header">
             {{sensor.description}}
@@ -246,9 +246,9 @@ averageTemp.push(b);
           </div>
 
         </div>
-      </div>
 
-    </div>
+</center>
+
     <div class="row">
     <div id="last_umid_chart" style="width: 1600px; height: 350px;"></div>
   </div>
