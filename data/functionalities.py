@@ -2,7 +2,7 @@ from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg
 from datetime import datetime, timedelta
-import threading
+# import threading
 
 count = {}
 
@@ -47,14 +47,18 @@ def generateAvgData(dates, sensor_id):
 	return (sensor_id, zip(dates,countInfo), tempAverage, umidAverage )
 
 def generateLastData(sensor_id):
+	conn = MySQLdb.connect(host="localhost", user="tccuser",passwd="tccsenhabd",db="tccbd")
+	cursor = conn.cursor()
 	lastTempAvg = []
 	lastUmidAvg = []
 	now = datetime.now()
 	today = now - timedelta(minutes=now.minute,seconds=now.second, microseconds=now.microsecond)
 	yesterday = now - timedelta(days=1, minutes=now.minute,seconds=now.second, microseconds=now.microsecond)
 	for hour in listOfHours(yesterday.hour):
-		lastUmidAvg.append((hour, Reading.objects.filter(sensor_id__exact = sensor_id, moment__gte=yesterday, moment__lt=today, moment__hour=hour, sensorKind__description__iexact='Umidade').aggregate(Avg('value'))['value__avg']))
-		lastTempAvg.append((hour, Reading.objects.filter(sensor_id__exact = sensor_id, moment__gte=yesterday, moment__lt=today, moment__hour=hour, sensorKind__description__iexact='Temperatura').aggregate(Avg('value'))['value__avg']))
+		pass
+		# sql = "select hour(moment), avg(value) from data_reading where moment>='"+str(yesterday)+"' and moment <'"+str(today)+"' and ;"
+		# lastUmidAvg.append((hour, Reading.objects.filter(sensor_id__exact = sensor_id, moment__gte=yesterday, moment__lt=today, moment__hour=hour, sensorKind__description__iexact='Umidade').aggregate(Avg('value'))['value__avg']))
+		# lastTempAvg.append((hour, Reading.objects.filter(sensor_id__exact = sensor_id, moment__gte=yesterday, moment__lt=today, moment__hour=hour, sensorKind__description__iexact='Temperatura').aggregate(Avg('value'))['value__avg']))
 	return (sensor_id, lastTempAvg, lastUmidAvg)
 
 def listOfHours(begin):

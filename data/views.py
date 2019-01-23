@@ -6,11 +6,12 @@ from django.shortcuts import redirect, render
 from django.http import StreamingHttpResponse, HttpResponse
 from .functionalities import *
 from .models import *
-
+import MySQLdb
 from datetime import datetime
 from .functionalities import generateAvgData, generateLastData, calculateScore
 
 # Create your views here.
+
 varAux = datetime.now()-timedelta(1)
 varAux2 = datetime.now()-timedelta(hours=1)
 dateReadingInfo=0
@@ -34,12 +35,18 @@ def postData(request):
 		return redirect('indexData')
 
 def index(request):
+	conn = MySQLdb.connect(host="localhost", user="tccuser",passwd="tccsenhabd",db="tccbd")
+	cursor = conn.cursor()
 	sensorInfo = Sensor.objects.all()
-	numReadings = Reading.objects.count()
+	sql= "select count(*) from data_reading"
+	cursor.execute(sql)
+	numReadings = cursor.fetchone()[0]
 	sensorReadingInfo = []
 	lastReading=[]
 	for sensor in sensorInfo:
-		sensorReadingInfo.append(Reading.objects.filter(sensor_id__exact = sensor.id).count())
+		sql = "select count(*) from data_reading where sensor_id="+str(sensor.id)+";"
+		cursor.execute(sql)
+		sensorReadingInfo.append(cursor.fetchone()[0])
 		lastReading.append(Reading.objects.filter(sensor_id__exact=sensor.id).latest('moment'))
 	info = zip(sensorInfo, sensorReadingInfo, lastReading)
 	pieData =[('sensor', 'quantidade')]
@@ -50,6 +57,7 @@ def index(request):
 	 'info':info,
 	 'pieData':pieData
 	 }
+	conn.close()
 	return render(request, 'data/index.html', context)
 
 def sensorDetail(request, sensor_id):
@@ -62,12 +70,12 @@ def sensorDetail(request, sensor_id):
 	sensor = Sensor.objects.get(id=sensor_id)
 	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
 	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
-	if(varAux2.hour != now.hour or not dadosLast or str(sensor_id) not in dadosLast):
-		if(varAux2.hour != now.hour and str(sensor_id) in dadosLast):
-			dadosLast[str(sensor_id)] = generateLastData(sensor_id)
-		else:
-			dadosLast.update({str(sensor_id):generateLastData(sensor_id)})
-		varAux2 = now
+	# if(varAux2.hour != now.hour or not dadosLast or str(sensor_id) not in dadosLast):
+	# 	if(varAux2.hour != now.hour and str(sensor_id) in dadosLast):
+	# 		dadosLast[str(sensor_id)] = generateLastData(sensor_id)
+	# 	else:
+	# 		dadosLast.update({str(sensor_id):generateLastData(sensor_id)})
+	# 	varAux2 = now
 	# if((varAux.date() != now.date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
 	#  	dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
 	# 	if (varAux.date() != now.date() and str(sensor_id) in dadosAvg):
@@ -75,17 +83,17 @@ def sensorDetail(request, sensor_id):
 	# 	else:
 	# 		dadosAvg.update({str(sensor_id):generateAvgData(dateReadingInfo, sensor_id)})
 		# varAux = now
-	dadosGraficos = zip(
+	# dadosGraficos = zip(
 	# dadosAvg[str(sensor_id)][2],
 	#  dadosAvg[str(sensor_id)][3],
-	dadosLast[str(sensor_id)][1],
-	dadosLast[str(sensor_id)][2])
+	# dadosLast[str(sensor_id)][1],
+	# dadosLast[str(sensor_id)][2])
 	context = {
 	 'id':sensor_id,
 	 # 'dateCountInfo':dateReadingInfo,
 	 'lastTempReading':lastTempReading,
 	 'lastUmidReading':lastUmidReading,
 	 'sensor':sensor,
-	 'dadosGraficos': dadosGraficos
+	 # 'dadosGraficos': dadosGraficos
 	 }
 	return render(request, 'data/sensor.html', context)
