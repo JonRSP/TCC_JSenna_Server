@@ -37,24 +37,24 @@ try
   var b = ['{{data.2.0|safe}}'.concat(':00'), null];
 }
 lastAvgTemp.push(b);
-
-try
-{
-  var b = ['{{data.1.0|safe}}'.concat(':00'), {{data.1.1|safe}}];
-}catch(err)
-{
-  var b = ['{{data.1.0|safe}}'.concat(':00'), null];
-}
-averageUmid.push(b);
-
-try
-{
-  var b = ['{{data.0.0|safe}}'.concat(':00'), {{data.0.1|safe}}];
-}catch(err)
-{
-  var b = ['{{data.0.0|safe}}'.concat(':00'), null];
-}
-averageTemp.push(b);
+//
+// try
+// {
+//   var b = ['{{data.1.0|safe}}'.concat(':00'), {{data.1.1|safe}}];
+// }catch(err)
+// {
+//   var b = ['{{data.1.0|safe}}'.concat(':00'), null];
+// }
+// averageUmid.push(b);
+//
+// try
+// {
+//   var b = ['{{data.0.0|safe}}'.concat(':00'), {{data.0.1|safe}}];
+// }catch(err)
+// {
+//   var b = ['{{data.0.0|safe}}'.concat(':00'), null];
+// }
+// averageTemp.push(b);
 </script>
 {% endfor %}
 
@@ -128,28 +128,28 @@ averageTemp.push(b);
        };
 
        // umidade média
-       var avgUmidData = new google.visualization.DataTable();
-       avgUmidData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
-       avgUmidData.addColumn({type:'number', id:'valor', label:'Umidade %'});
-       avgUmidData.addRows(averageUmid);
-
-        var umidAvgOptions = {
-          title: 'Umidade Média',
-          curveType: 'function',
-          legend: { position: 'right' }
-        };
-
-        // temperatura média
-       var avgTempData = new google.visualization.DataTable();
-       avgTempData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
-       avgTempData.addColumn({type:'number', id:'valor', label:'Temperaura °C'});
-       avgTempData.addRows(averageTemp);
-
-       var tempAvgOptions = {
-         title: 'Temperaura Média',
-         curveType: 'function',
-         legend: { position: 'right' }
-        };
+       // var avgUmidData = new google.visualization.DataTable();
+       // avgUmidData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
+       // avgUmidData.addColumn({type:'number', id:'valor', label:'Umidade %'});
+       // avgUmidData.addRows(averageUmid);
+       //
+       //  var umidAvgOptions = {
+       //    title: 'Umidade Média',
+       //    curveType: 'function',
+       //    legend: { position: 'right' }
+       //  };
+       //
+       //  // temperatura média
+       // var avgTempData = new google.visualization.DataTable();
+       // avgTempData.addColumn({ type: 'string', id: 'hour' , label:'Hora do dia'});
+       // avgTempData.addColumn({type:'number', id:'valor', label:'Temperaura °C'});
+       // avgTempData.addRows(averageTemp);
+       //
+       // var tempAvgOptions = {
+       //   title: 'Temperaura Média',
+       //   curveType: 'function',
+       //   legend: { position: 'right' }
+       //  };
 
         // umidade média ultimas 24h
 
@@ -176,15 +176,15 @@ averageTemp.push(b);
 
         // criação dos objetos de caledário
         var calendarChart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
-        var umidAvgChart = new google.visualization.LineChart(document.getElementById('umid_chart'));
-        var tempAvgChart = new google.visualization.LineChart(document.getElementById('temp_chart'));
+        // var umidAvgChart = new google.visualization.LineChart(document.getElementById('umid_chart'));
+        // var tempAvgChart = new google.visualization.LineChart(document.getElementById('temp_chart'));
         var lastTempAvgChart = new google.visualization.LineChart(document.getElementById('last_temp_chart'));
         var lastUmidAvgChart = new google.visualization.LineChart(document.getElementById('last_umid_chart'));
 
         // desenhar calendarios
        calendarChart.draw(dataTable, calendarOptions);
-       umidAvgChart.draw(avgUmidData,umidAvgOptions);
-       tempAvgChart.draw(avgTempData,tempAvgOptions);
+       // umidAvgChart.draw(avgUmidData,umidAvgOptions);
+       // tempAvgChart.draw(avgTempData,tempAvgOptions);
        lastUmidAvgChart.draw(lastAvgUmidData,lastUmidAvgOptions);
        lastTempAvgChart.draw(lastAvgTempData,lastTempAvgOptions);
    }
@@ -255,12 +255,12 @@ averageTemp.push(b);
    <div class="row">
     <div id="last_temp_chart" style="width: 1600px; height: 350px;"></div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
     <div id="umid_chart" style="width: 1600px; height: 350px;"></div>
   </div>
     <div class="row">
     <div id="temp_chart" style="width: 1600px; height: 350px;"></div>
-    </div>
+    </div> -->
 
 
 
