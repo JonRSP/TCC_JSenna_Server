@@ -22,7 +22,7 @@ def addSensor(received_data):
 	return newSensor.id
 
 def addReading(received_data, sensorID):
-	number = 3
+	number = 10
 	sensorObj = Sensor.objects.get(id=sensorID)
 	if(not str(sensorID) in count):
 		count.update({str(sensorID):0})
@@ -65,9 +65,9 @@ def listOfHours(begin):
 
 def calculateScore(id, number):
 	now = datetime.now()
-	delta = timedelta(minutes=30,seconds=now.second, microseconds=now.microsecond)
+	delta = timedelta(days=10,minutes=30,seconds=now.second, microseconds=now.microsecond)
 	lastAvgUmid = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Umidade').order_by('-id')[:number].aggregate(Avg('value'))['value__avg']
-	timeAvgUmid = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Umidade', moment__time__gte=(now-delta).time(),moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
+	timeAvgUmid = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Umidade',moment__gte=(now-delta), moment__time__gte=(now-delta).time(),moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
 	lastAvgTemp = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Temperatura').order_by('-id')[:number].aggregate(Avg('value'))['value__avg']
 	timeAvgTemp = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact='Temperatura', moment__time__gte=(now-delta).time(),moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
 	scoreUmid = (1/(abs((lastAvgUmid/timeAvgUmid)-1)+1))*5

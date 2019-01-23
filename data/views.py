@@ -66,6 +66,7 @@ def sensorDetail(request, sensor_id):
 			dadosLast[str(sensor_id)] = generateLastData(sensor_id)
 		else:
 			dadosLast.update({str(sensor_id):generateLastData(sensor_id)})
+		varAux2 = datetime.now()
 	if((varAux.date() != datetime.now().date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
 		if (varAux.date() != datetime.now().date() and str(sensor_id) in dadosAvg):
