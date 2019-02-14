@@ -20,6 +20,9 @@ class PossibleAnswers(models.Model):
 	description = models.CharField(max_length=50)
 	questions = models.ManyToManyField(Questions)
 
+	def __str__(self):
+		return self.description
+
 
 class Answers(models.Model):
 	sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)

@@ -12,8 +12,3 @@ def index(request):
 	template = loader.get_template('data/homepage.html')
 	context={}
 	return HttpResponse(template.render(context,request))
-
-class sensorEdit(UpdateView):
-	model = Sensor
-	fields = ['description']
-	success_url = 'http://jsenna.xyz/data'
