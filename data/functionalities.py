@@ -23,6 +23,7 @@ def addSensor(received_data):
 	return newSensor.id
 
 def addReading(received_data, sensorID):
+	global count
 	number = 15
 	if(not str(sensorID) in count):
 		count.update({str(sensorID):0})
