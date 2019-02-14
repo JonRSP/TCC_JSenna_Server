@@ -5,7 +5,7 @@ from django.db import models
 
 # Create your models here.
 class Sensor(models.Model):
-	description = models.CharField(max_length=50, null=True)
+	description = models.CharField(max_length=50, null=True,verbose_name='Descrição'	)
 	longitude = models.DecimalField(max_digits=5, decimal_places=2, null=True)
 	latitude = models.DecimalField(max_digits=5, decimal_places=2, null=True)
 	score = models.DecimalField(max_digits=3, decimal_places=2)

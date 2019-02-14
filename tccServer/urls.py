@@ -16,9 +16,15 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^data/', include('data.urls')),
+    url(r'^login/', auth_views.login,{'template_name': 'questions/login.html'}, name='login'),
+    url(r'^logout/', auth_views.logout,{'next_page': '/'}, name='logout'),
+    url(r'^sensorEdit/(?P<pk>[0-9]+)$', views.sensorEdit.as_view(), name='sensorEdit'),
+    # url(r'^sensorEdit/(?P<sensor_id>[0-9]+)$', views.sensorEdit, name='sensorEdit'),
+    url(r'^questions/', include('questions.urls')),
     url(r'^$', views.index, name='index'),
 ]

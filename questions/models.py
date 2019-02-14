@@ -9,9 +9,9 @@ from data.models import *
 # Create your models here.
 
 class Questions(models.Model):
-	description = models.CharField(max_length=75)
-	weight = models.IntegerField()
-	sensorKind = models.ManyToManyField(SensorKind)
+	description = models.CharField(max_length=75,verbose_name='Descrição')
+	weight = models.IntegerField(verbose_name='Peso')
+	sensorKind = models.ManyToManyField(SensorKind,verbose_name='Tipo de sensor')
 
 	def __str__(self):
 		return self.description
@@ -26,4 +26,3 @@ class Answers(models.Model):
 	question = models.ForeignKey(Questions, on_delete=models.CASCADE)
 	answer = models.ForeignKey(PossibleAnswers, on_delete=models.CASCADE)
 	moment = models.DateTimeField(auto_now_add=True)
-

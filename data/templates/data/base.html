@@ -20,11 +20,19 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <span class="border-0">
-          <a class="nav-link" href="http://www.jsenna.xyz/data/">
-            <!-- <font size="3"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span></font> -->
-            <font size="6"> Dados</font></a></span>
+            <a class="nav-link" href="http://www.jsenna.xyz/data/">
+              <font size="6"> Dados</font>
+            </a>
+          </span>
         </li>
       </ul>
+      <span class="border-0">
+      {% if user.is_authenticated %}
+      <a class="nav-link" href="http://www.jsenna.xyz/logout"><button class="btn btn-danger"><font size="4">logout</font></button></a>
+      {% else %}
+      <a class="nav-link" href="http://www.jsenna.xyz/login"><button class="btn btn-success"><font size="4">login</font></button></a>
+      {% endif %}
+      </span>
   </nav>
   {% block body %}
   {% endblock %}
