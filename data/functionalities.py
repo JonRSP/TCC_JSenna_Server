@@ -79,7 +79,7 @@ def calculateScore(id,number):
 		lastNAvg = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact=kind.description).order_by('-id')[:number].aggregate(Avg('value'))['value__avg']
 		timeAvg = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact=kind.description,moment__gte=(now-delta), moment__time__gte=(now-delta).time(), moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
 		scoreKind = (1/(abs((lastNAvg/timeAvg)-1)+1))*5
-		if(scoreKind == 5):
+		if(scoreKind > 4):
 			if(checkErrorEqual(id, kind, 12)):
 				totalScore += 99999999
 			else:
