@@ -76,23 +76,23 @@ WSGI_APPLICATION = 'tccServer.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#data
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tccbd',
-	'USER': 'tccuser',
-	'PASSWORD': 'tccsenhabd',
-	'HOST': 'localhost',
-	'PORT': '',
-	'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'ENGINE': 'django.db.backends.mysql',
     #     'NAME': 'tccbd',
-    #     'USER': 'tccuser',
-    #     'PASSWORD': 'tccsenhabd',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
+	# 'USER': 'tccuser',
+	# 'PASSWORD': 'tccsenhabd',
+	# 'HOST': 'localhost',
+	# 'PORT': '',
+	# 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tccbd',
+        'USER': 'tccuser',
+        'PASSWORD': 'tccsenhabd',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
 
@@ -134,3 +134,4 @@ LOGIN_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,"static")

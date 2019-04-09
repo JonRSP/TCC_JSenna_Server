@@ -25,10 +25,10 @@ def addSensor(received_data):
 #escalavel
 def addReading(received_data, sensorID):
 	global count
-	number = 15
+	number = 15 #numero de leituras antes de calcular score novamente
 	if(not str(sensorID) in count):
 		count.update({str(sensorID):0})
-	count[str(sensorID)] = (count[str(sensorID)]+1)%number #numero de leituras antes de calcular score novamente
+	count[str(sensorID)] = (count[str(sensorID)]+1)%number
 	sensorObj = Sensor.objects.get(id=sensorID)
 	if( count[str(sensorID)] == 0):
 		threadScore = threading.Thread(target=calculateScore,args=(sensorID,number))
