@@ -7,3 +7,4 @@ from django.contrib import admin
 admin.site.register(Questions)
 admin.site.register(PossibleAnswers)
 admin.site.register(Answers)
+admin.site.register(QuestionKind)

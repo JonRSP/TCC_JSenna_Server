@@ -53,26 +53,34 @@ def index(request):
 	return render(request, 'data/index.html', context)
 
 def sensorDetail(request, sensor_id):
+	now = datetime.now()
+	lastTen = now - timedelta(minutes=10)
 	global varAux
 	global varAux2
 	global dateReadingInfo
 	global dadosAvg
 	global dadosLast
 	sensor = Sensor.objects.get(id=sensor_id)
-	lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Temperatura').latest('moment')
-	lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, sensorKind__description__iexact='Umidade').latest('moment')
-	if(varAux2.hour != datetime.now().hour or not dadosLast or str(sensor_id) not in dadosLast):
-		if(varAux2.hour != datetime.now().hour and str(sensor_id) in dadosLast):
+	try:
+		lastTempReading = Reading.objects.filter(sensor_id__exact=sensor_id, moment__gte=lastTen, sensorKind__description__iexact='Temperatura').latest('moment').value
+	except:
+		lastTempReading = '-'
+	try:
+		lastUmidReading = Reading.objects.filter(sensor_id__exact=sensor_id, moment__gte=lastTen, sensorKind__description__iexact='Umidade').latest('moment').value
+	except:
+		lastUmidReading = '-'
+	if(varAux2.hour != now.hour or not dadosLast or str(sensor_id) not in dadosLast):
+		if(varAux2.hour != now.hour and str(sensor_id) in dadosLast):
 			dadosLast[str(sensor_id)] = generateLastData(sensor_id)
 		else:
 			dadosLast.update({str(sensor_id):generateLastData(sensor_id)})
-	if((varAux.date() != datetime.now().date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
+	if((varAux.date() != now.date() or not dadosAvg) or str(sensor_id) not in dadosAvg):
 		dateReadingInfo = Reading.objects.filter(sensor_id__exact = sensor_id).dates('moment','day')
-		if (varAux.date() != datetime.now().date() and str(sensor_id) in dadosAvg):
+		if (varAux.date() != now.date() and str(sensor_id) in dadosAvg):
 			dadosAvg[str(sensor_id)]=generateAvgData(dateReadingInfo, sensor_id)
 		else:
 			dadosAvg.update({str(sensor_id):generateAvgData(dateReadingInfo, sensor_id)})
-		varAux = datetime.now()
+		varAux = now
 	teste = zip(dadosAvg[str(sensor_id)][2], dadosAvg[str(sensor_id)][3],dadosLast[str(sensor_id)][1],dadosLast[str(sensor_id)][2])
 	context = {
 	 'id':sensor_id,
