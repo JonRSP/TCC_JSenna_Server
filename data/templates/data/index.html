@@ -3,7 +3,9 @@
 {% block body %}
 <center>
 <div class="alert alert-primary" role="alert">
-Atualmente, constam {{numReadings}} leituras de sensores
+  <h2>
+  Atualmente, constam {{numReadings}} leituras de sensores
+  </h2>
 </div>
 </center>
 <div class="row">
@@ -12,18 +14,34 @@ Atualmente, constam {{numReadings}} leituras de sensores
     <center>
   {% for entry in info %}
     <div class="card w-70">
+
     <div class="card-header">
-      <p>
+      <div class="row">
+        <div class="col">
+    <div align="center">
     <a href="sensor/{{entry.0.id}}"><font size="3">{{entry.0}}</font></a>
-    </p>
+  </div>
+  </div>
+  <div class="col">
+    <div align="center">
+    <font size="3"><b>Score:</b> {{entry.0.score}}</font>
+  </div>
+  </div>
+</div>
     </div>
+
+
+
     <div class="card-body">
       <!-- <h5 class="card-title">Total de leituras: {{entry.1}}</h5> -->
+      <h3>
       <p class="card-text">Última leitura foi de {{entry.2.sensorKind}} no valor de {{entry.2.value}}</p>
-      <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+      <!--<a href="#" class="btn btn-primary">Go somewhere</a>--></h3>
     </div>
     <div class="card-footer text-muted">
+      <h4>
       {{entry.2.moment}}
+    </h4>
     </div>
   </div>
   <br>
@@ -71,6 +89,7 @@ Atualmente, constam {{numReadings}} leituras de sensores
         chart.draw(data, options);
       }
     </script>
+
     <div id="donutchart" style="width: 900px; height: 500px;"></div>
 
 </center>

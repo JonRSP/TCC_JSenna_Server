@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$4nopya_5=1e^guxrgue5cvg6^)32o)_u4tw8g!js1y*x&6vg1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['3.86.120.246','127.0.0.1','www.jsenna.xyz','jsenna.xyz','http://jsenna.xyz']
 
@@ -76,23 +76,23 @@ WSGI_APPLICATION = 'tccServer.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#data
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tccbd',
-	'USER': 'tccuser',
-	'PASSWORD': 'tccsenhabd',
-	'HOST': 'localhost',
-	'PORT': '',
-	'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'ENGINE': 'django.db.backends.mysql',
     #     'NAME': 'tccbd',
-    #     'USER': 'tccuser',
-    #     'PASSWORD': 'tccsenhabd',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
+	# 'USER': 'tccuser',
+	# 'PASSWORD': 'tccsenhabd',
+	# 'HOST': 'localhost',
+	# 'PORT': '',
+	# 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tccbd',
+        'USER': 'tccuser',
+        'PASSWORD': 'tccsenhabd',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
 

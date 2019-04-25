@@ -36,7 +36,7 @@ class PossibleAnswers(models.Model):
 class Answers(models.Model):
 	sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
 	question = models.ForeignKey(Questions, on_delete=models.CASCADE)
-	answer = models.ForeignKey(PossibleAnswers, on_delete=models.CASCADE)
+	answer = models.ForeignKey(PossibleAnswers, on_delete=models.CASCADE,verbose_name='Resposta', null=False)
 	moment = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
