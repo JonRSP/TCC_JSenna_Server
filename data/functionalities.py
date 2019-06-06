@@ -72,12 +72,13 @@ def listOfHours(begin):
 def calculateScore(id,number):
 	now = datetime.now()
 	delta = timedelta(days=5,minutes=30,seconds=now.second, microseconds=now.microsecond)
+	lastDelta = now - delta
 	kinds = SensorKind.objects.filter(sensors__exact=id)
 	scoreKind=0
 	totalScore=0
 	for kind in kinds:
 		lastNAvg = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact=kind.description).order_by('-id')[:number].aggregate(Avg('value'))['value__avg']
-		timeAvg = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact=kind.description,moment__gte=(now-delta), moment__time__gte=(now-delta).time(), moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
+		timeAvg = Reading.objects.filter(sensor_id__exact=id, sensorKind__description__iexact=kind.description,moment__gte=(lastDelta), moment__time__gte=(lastDelta).time(), moment__time__lt=(now+delta).time()).aggregate(Avg('value'))['value__avg']
 		scoreKind = (1/(abs((lastNAvg/timeAvg)-1)+1))*5
 		if(scoreKind > 4):
 			if(checkErrorEqual(id, kind, 12)):
